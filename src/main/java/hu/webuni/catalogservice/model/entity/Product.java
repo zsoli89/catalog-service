@@ -27,6 +27,8 @@ public class Product extends BaseEntity {
     private String name;
     private Long quantity;
     private AmountUnits amountUnits;
+    private String description;
+    private String color;
     @ManyToMany(mappedBy = "products")
     private Set<Category> categories;
 }

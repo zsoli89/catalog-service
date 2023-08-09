@@ -27,7 +27,6 @@ public class InitDbService {
 
     @Transactional
     public void addInitData() {
-
     }
 
     private Category createCategory(String name, List<Product> productList) {

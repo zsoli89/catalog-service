@@ -14,5 +14,6 @@ public class ProductDto extends BaseDto {
     private String name;
     private Long quantity;
     private AmountUnits amountUnits;
-
+    private String description;
+    private String color;
 }
