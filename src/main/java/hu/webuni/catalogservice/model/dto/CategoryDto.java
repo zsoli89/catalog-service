@@ -1,14 +1,18 @@
 package hu.webuni.catalogservice.model.dto;
 
-import lombok.*;
+import hu.webuni.commonlib.base.BaseDto;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-@Getter
-@Setter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class CategoryDto {
+import java.util.Set;
+
+@Data
+@EqualsAndHashCode(callSuper = false)
+public class CategoryDto extends BaseDto {
 
     private Long id;
+
     private String name;
+    private Set<ProductDto> products;
+
 }

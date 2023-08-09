@@ -1,6 +1,7 @@
 package hu.webuni.catalogservice.model.entity;
 
 import hu.webuni.catalogservice.model.enums.AmountUnits;
+import hu.webuni.commonlib.base.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -14,9 +15,9 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Entity
-public class Product {
+public class Product extends BaseEntity {
 
     @Id
     @GeneratedValue
@@ -26,6 +27,6 @@ public class Product {
     private String name;
     private Long quantity;
     private AmountUnits amountUnits;
-    @ManyToMany(mappedBy = "productList")
-    private Set<Category> categoryList;
+    @ManyToMany(mappedBy = "products")
+    private Set<Category> categories;
 }

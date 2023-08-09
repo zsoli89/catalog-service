@@ -1,9 +1,7 @@
 package hu.webuni.catalogservice.model.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import hu.webuni.commonlib.base.BaseEntity;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Set;
@@ -13,9 +11,13 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Entity
-public class Category {
+@NamedEntityGraph(
+        name = "Category.products",
+        attributeNodes = @NamedAttributeNode("products")
+)
+public class Category extends BaseEntity {
 
     @Id
     @GeneratedValue
@@ -23,5 +25,5 @@ public class Category {
     private Long id;
     private String name;
     @ManyToMany
-    private Set<Product> productList;
+    private Set<Product> products;
 }
