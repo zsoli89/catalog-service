@@ -6,6 +6,7 @@ import hu.webuni.catalogservice.model.enums.AmountUnits;
 import hu.webuni.catalogservice.repository.CategoryRepository;
 import hu.webuni.catalogservice.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,11 +20,20 @@ public class InitDbService {
 
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
+    private final JdbcTemplate jdbcTemplate;
 
     @Transactional
     public void deleteDb() {
-        productRepository.deleteAll();
-        categoryRepository.deleteAll();
+        productRepository.deleteAllInBatch();
+        categoryRepository.deleteAllInBatch();
+    }
+
+    @Transactional
+    public void deleteAudTables() {
+        jdbcTemplate.update("DELETE FROM product_aud");
+        jdbcTemplate.update("DELETE FROM category_aud");
+        jdbcTemplate.update("DELETE FROM category_products_aud");
+        jdbcTemplate.update("DELETE FROM revinfo");
     }
 
     @Transactional
@@ -65,5 +75,19 @@ public class InitDbService {
                         .color(color)
                         .build()
         );
+    }
+
+    @Transactional
+    public void modifyPriceofProduct() {
+        Product product = productRepository.findProductByBrand("Kolorky").get(0);
+        product.setPrice(1000D);
+        productRepository.save(product);
+    }
+
+    @Transactional
+    public void modifyPriceofProduct2() {
+        Product product = productRepository.findProductByBrand("Kolorky").get(0);
+        product.setPrice(1500D);
+        productRepository.save(product);
     }
 }

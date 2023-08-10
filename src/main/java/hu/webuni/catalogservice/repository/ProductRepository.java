@@ -70,4 +70,6 @@ public interface ProductRepository extends
     @EntityGraph(attributePaths = {"categories"})
     @Query("SELECT p FROM Product p")
     List<Product> findAllWithCategories(Predicate predicate, Pageable pageable);
+
+    List<Product> findProductByBrand(String brand);
 }

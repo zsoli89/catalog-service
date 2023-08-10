@@ -4,6 +4,7 @@ import hu.webuni.catalogservice.model.enums.AmountUnits;
 import hu.webuni.commonlib.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.envers.Audited;
 
 import java.util.Set;
 
@@ -14,6 +15,7 @@ import java.util.Set;
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Entity
+@Audited
 public class Product extends BaseEntity {
 
     @Id

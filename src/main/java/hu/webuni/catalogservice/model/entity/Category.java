@@ -3,6 +3,7 @@ package hu.webuni.catalogservice.model.entity;
 import hu.webuni.commonlib.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.envers.Audited;
 
 import java.util.Set;
 
@@ -17,6 +18,7 @@ import java.util.Set;
         name = "Category.products",
         attributeNodes = @NamedAttributeNode("products")
 )
+@Audited
 public class Category extends BaseEntity {
 
     @Id

@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>hu.webuni</groupId>
 	<artifactId>catalog-service</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.3-SNAPSHOT</version>
 	<name>catalog-service</name>
 	<description>catalog-service</description>
 	<properties>
@@ -61,6 +61,11 @@
 		<dependency>
 			<groupId>com.querydsl</groupId>
 			<artifactId>querydsl-jpa</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate.orm</groupId>
+			<artifactId>hibernate-envers</artifactId>
 		</dependency>
 	</dependencies>
 
