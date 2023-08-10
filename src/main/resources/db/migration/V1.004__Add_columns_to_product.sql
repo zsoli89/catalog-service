@@ -1,0 +1,1 @@
+alter table product add column brand varchar(255);

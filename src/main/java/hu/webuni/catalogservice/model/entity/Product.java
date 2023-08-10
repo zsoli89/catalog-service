@@ -2,10 +2,7 @@ package hu.webuni.catalogservice.model.entity;
 
 import hu.webuni.catalogservice.model.enums.AmountUnits;
 import hu.webuni.commonlib.base.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Set;
@@ -23,9 +20,11 @@ public class Product extends BaseEntity {
     @GeneratedValue
     @EqualsAndHashCode.Include()
     private Long id;
-    private Double price;
+    private String brand;
     private String name;
     private Long quantity;
+    private Double price;
+    private Long size;
     private AmountUnits amountUnits;
     private String description;
     private String color;
