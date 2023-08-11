@@ -1,1 +1,0 @@
-alter table product add column size bigint;

@@ -16,11 +16,14 @@ public interface ProductMapper {
     ProductDto entityToDto(Product entity);
 
     @Named("summary")
-    @Mapping(target = "categories", ignore = true)
+    @Mapping(target = "category", ignore = true)
     ProductDto productSummaryToDto(Product product);
     @IterableMapping(qualifiedByName = "summary")
     List<ProductDto> productSummariesToDtoList(Iterable<Product> productList);
 
+    @Named("dtotoentity")
+    @Mapping(target = "category", ignore = true)
+    Product dtoSummaryToProduct(ProductDto product);
     List<ProductDto> productToDtoList(Iterable<Product> productList);
 
 }

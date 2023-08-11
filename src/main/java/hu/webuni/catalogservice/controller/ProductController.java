@@ -4,6 +4,7 @@ import com.querydsl.core.types.Predicate;
 import hu.webuni.catalogservice.model.dto.ProductDto;
 import hu.webuni.catalogservice.model.entity.HistoryData;
 import hu.webuni.catalogservice.model.entity.Product;
+import hu.webuni.catalogservice.model.mapper.ProductMapper;
 import hu.webuni.catalogservice.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @RestController
@@ -20,6 +22,25 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+    private final ProductMapper productMapper;
+
+    @PostMapping("/create")
+    @ResponseStatus(HttpStatus.OK)
+    public ProductDto create(@RequestBody ProductDto dto) {
+        return productService.create(productMapper.dtoToEntity(dto));
+    }
+
+    @PutMapping("/update")
+    @ResponseStatus(HttpStatus.OK)
+    public ProductDto update(@RequestBody ProductDto dto) {
+        return productService.update(dto);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(@PathVariable Long id) {
+        productService.delete(id);
+    }
 
     @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)

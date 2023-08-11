@@ -1,12 +1,9 @@
 package hu.webuni.catalogservice.controller;
 
-import com.querydsl.core.types.Predicate;
 import hu.webuni.catalogservice.model.dto.CategoryDto;
-import hu.webuni.catalogservice.model.entity.Category;
 import hu.webuni.catalogservice.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -23,16 +20,24 @@ public class CategoryController {
 
     @GetMapping("/find/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public CategoryDto findById(@PathVariable Long id) {
-        return categoryService.findById(id);
+    public CategoryDto findById(
+            @PathVariable Long id,
+            @RequestParam Optional<Boolean> full
+    ) {
+        return categoryService.findById(id, full);
     }
 
-    @GetMapping("/search")
+    @PostMapping("/create")
+    @ResponseStatus(HttpStatus.OK)
+    public CategoryDto create(@RequestBody CategoryDto dto) {
+        return categoryService.createCategory(dto);
+    }
+
+    @GetMapping("/findall")
     @ResponseStatus(HttpStatus.OK)
     public List<CategoryDto> searchCategories(
-            @QuerydslPredicate(root = Category.class) Predicate predicate,
             @RequestParam Optional<Boolean> full,
             @SortDefault("id") Pageable pageable) {
-        return categoryService.searchCategories(predicate, full, pageable);
+        return categoryService.findAllWithRelationships(full, pageable);
     }
 }

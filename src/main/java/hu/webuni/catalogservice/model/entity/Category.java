@@ -14,10 +14,6 @@ import java.util.Set;
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Entity
-@NamedEntityGraph(
-        name = "Category.products",
-        attributeNodes = @NamedAttributeNode("products")
-)
 @Audited
 public class Category extends BaseEntity {
 
@@ -26,6 +22,7 @@ public class Category extends BaseEntity {
     @EqualsAndHashCode.Include()
     private Long id;
     private String name;
-    @ManyToMany
+    @OneToMany(mappedBy = "category")
     private Set<Product> products;
+
 }

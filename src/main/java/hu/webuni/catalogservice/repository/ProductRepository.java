@@ -1,15 +1,9 @@
 package hu.webuni.catalogservice.repository;
 
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.StringExpression;
 import hu.webuni.catalogservice.model.entity.Product;
-import hu.webuni.catalogservice.model.entity.QCategory;
 import hu.webuni.catalogservice.model.entity.QProduct;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
@@ -27,7 +21,7 @@ public interface ProductRepository extends
     @Override
     default void customize(QuerydslBindings bindings, QProduct product) {
         bindings.bind(product.name).first(StringExpression::containsIgnoreCase);
-        bindings.bind(product.categories.any().name).first(StringExpression::startsWith);
+        bindings.bind(product.category.name).first(StringExpression::startsWith);
         bindings.bind(product.price).all((path, values) -> {
             Iterator<? extends Double> iterator = values.iterator();
             if (values.size() == 1) {
@@ -66,10 +60,6 @@ public interface ProductRepository extends
             }
         });
     }
-
-    @EntityGraph(attributePaths = {"categories"})
-    @Query("SELECT p FROM Product p")
-    List<Product> findAllWithCategories(Predicate predicate, Pageable pageable);
 
     List<Product> findProductByBrand(String brand);
 }

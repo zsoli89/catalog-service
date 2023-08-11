@@ -2,11 +2,12 @@ package hu.webuni.catalogservice.model.entity;
 
 import hu.webuni.catalogservice.model.enums.AmountUnits;
 import hu.webuni.commonlib.base.BaseEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import lombok.*;
 import org.hibernate.envers.Audited;
-
-import java.util.Set;
 
 @Getter
 @Setter
@@ -30,6 +31,7 @@ public class Product extends BaseEntity {
     private AmountUnits amountUnits;
     private String description;
     private String color;
-    @ManyToMany(mappedBy = "products")
-    private Set<Category> categories;
+    @ManyToOne
+    private Category category;
+
 }
