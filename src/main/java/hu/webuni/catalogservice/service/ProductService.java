@@ -16,6 +16,7 @@ import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.envers.RevisionType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -84,6 +84,7 @@ public class ProductService {
 
     @Transactional
     @SuppressWarnings({"rawtypes", "unchecked"})
+    @Cacheable("productHistory")
     public List<HistoryData<Double>> getHistoryById(Long id) {
         List<HistoryData<Double>> priceHistory = new ArrayList<>();
 
