@@ -2,12 +2,13 @@ package hu.webuni.catalogservice.service;
 
 import com.querydsl.core.types.Predicate;
 import hu.webuni.catalogservice.model.dto.ProductDto;
+import hu.webuni.catalogservice.model.entity.Category;
 import hu.webuni.catalogservice.model.entity.HistoryData;
 import hu.webuni.catalogservice.model.entity.Product;
-import hu.webuni.catalogservice.model.mapper.CategoryMapper;
 import hu.webuni.catalogservice.model.mapper.ProductMapper;
 import hu.webuni.catalogservice.repository.CategoryRepository;
 import hu.webuni.catalogservice.repository.ProductRepository;
+import hu.webuni.commonlib.dto.OrderDto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -36,7 +38,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
     private final CategoryRepository categoryRepository;
-    private final CategoryMapper categoryMapper;
+    private static final String UNDEFINED = "UNDEFINED";
 
     @PersistenceContext
     private EntityManager em;
@@ -44,14 +46,32 @@ public class ProductService {
     @Transactional
     public ProductDto create(Product product) {
         Product savedProduct;
+        expandProduct(product);
         if (product.getCategory() != null) {
-            product.setCategory(categoryRepository.findById(product.getCategory().getId()).get());
+            Optional<Category> optionalCategory = categoryRepository.findById(product.getCategory().getId());
+            if (optionalCategory.isEmpty()) {
+                logger.error("Couldn't find Category entity with id: {}, to save Product", product.getCategory().getId());
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            }
+            product.setCategory(optionalCategory.get());
             savedProduct = productRepository.save(product);
+            logger.info("Product saved by id {}", savedProduct.getId());
+            return productMapper.entityToDto(savedProduct);
         } else {
             savedProduct = productRepository.save(product);
+            logger.info("Product saved by id {}", savedProduct.getId());
+            return productMapper.productSummaryToDto(product);
         }
-        logger.info("Product saved by id {}", savedProduct.getId());
-        return productMapper.entityToDto(savedProduct);
+    }
+
+    private Product expandProduct(Product product) {
+        if (product.getBrand() == null || product.getBrand().isBlank())
+            product.setColor(UNDEFINED);
+        if (product.getColor() == null || product.getColor().isBlank())
+            product.setColor(UNDEFINED);
+        if (product.getDescription() == null || product.getDescription().isBlank())
+            product.setColor(UNDEFINED);
+        return product;
     }
 
     @Transactional
@@ -111,5 +131,25 @@ public class ProductService {
         return priceHistory;
     }
 
+    public List<ProductDto> findByIdList(OrderDto dto) {
+        List<Long> idList = new ArrayList<>(dto.getProducts().keySet());
+        List<Product> productList = productRepository.findByIdList(idList);
+        if(dto.getProducts().size() != (productList.size())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        List<ProductDto> productDtoList = productMapper.productSummariesToDtoList(productList);
+        if (productDtoList.size() == dto.getProducts().size()) {
+            for (ProductDto productDto : productDtoList) {
+                Long id = productDto.getId();
+                if (dto.getProducts().containsKey(id)) {
+                    Long quantity = dto.getProducts().get(id);
+                    productDto.setOrderedQuantity(quantity);
+                }
+            }
+        }
+        logger.info("Product entities found by ids, list size: {}", productDtoList.size());
+        return productDtoList;
+
+    }
 }
 

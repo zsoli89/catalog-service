@@ -21,4 +21,6 @@ public class ProductDto extends BaseDto {
     private String description;
     private String color;
     private CategoryDto category;
+    private Long orderedQuantity;
+
 }

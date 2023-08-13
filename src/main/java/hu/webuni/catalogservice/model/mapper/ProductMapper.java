@@ -21,9 +21,6 @@ public interface ProductMapper {
     @IterableMapping(qualifiedByName = "summary")
     List<ProductDto> productSummariesToDtoList(Iterable<Product> productList);
 
-    @Named("dtotoentity")
-    @Mapping(target = "category", ignore = true)
-    Product dtoSummaryToProduct(ProductDto product);
     List<ProductDto> productToDtoList(Iterable<Product> productList);
 
 }

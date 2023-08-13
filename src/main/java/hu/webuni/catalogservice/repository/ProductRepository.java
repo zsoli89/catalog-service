@@ -4,6 +4,7 @@ import com.querydsl.core.types.dsl.StringExpression;
 import hu.webuni.catalogservice.model.entity.Product;
 import hu.webuni.catalogservice.model.entity.QProduct;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
@@ -62,4 +63,7 @@ public interface ProductRepository extends
     }
 
     List<Product> findProductByBrand(String brand);
+
+    @Query("SELECT p FROM Product p WHERE p.id IN :ids")
+    List<Product> findByIdList(List<Long> ids);
 }
