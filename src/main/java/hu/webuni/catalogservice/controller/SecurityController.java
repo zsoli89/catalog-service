@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -22,8 +23,11 @@ public class SecurityController {
     @PostMapping("/free/login")
     @ResponseStatus(HttpStatus.OK)
     public Map<String, String> login(@RequestBody LoginDto loginDto) {
+        UserDetails userDetails = null;
         Authentication authentication = authService.authenticate(loginDto.getUsername(), loginDto.getPassword());
-        return securityService.login(loginDto, authentication);
+        userDetails = (UserDetails) authentication.getPrincipal();
+//        return securityService.login(loginDto, authentication);
+        return securityService.login(userDetails);
     }
 
     @GetMapping("/logout/{username}")

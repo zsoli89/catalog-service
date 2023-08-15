@@ -69,7 +69,7 @@ public class InitDbService {
         AppUser user1 = createUser("jakab.zoltan", "ugyejo");
         AppUser user2 = createUser("gelesztas.gazsi", "dummy");
         createRole(user1.getUsername(), "admin");
-        createRole(user2.getUsername(), "costumer");
+        createRole(user2.getUsername(), "customer");
     }
 
     private Category createCategory(String name) {

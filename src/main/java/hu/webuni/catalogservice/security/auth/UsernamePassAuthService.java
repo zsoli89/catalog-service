@@ -24,8 +24,9 @@ public class UsernamePassAuthService implements AuthenticationInterface {
     public Authentication authenticate(String username, String password) {
         UserDetails userDetails = webshopUserDetailsService.loadUserByUsername(username);
 
-        if (isMatchesPassword(password, userDetails.getPassword()))
-            return new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
+        if (isMatchesPassword(password, userDetails.getPassword())) {
+            return new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
+        }
         else
             throw new BadCredentialsException("Invalid username or password");
     }

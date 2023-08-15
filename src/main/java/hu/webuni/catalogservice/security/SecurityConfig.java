@@ -14,8 +14,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
-import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 @Configuration
 @EnableWebSecurity
@@ -32,13 +30,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    MvcRequestMatcher.Builder mvc(HandlerMappingIntrospector introspector) {
-        return new MvcRequestMatcher.Builder(introspector);
-    }
-
-    @Bean
-    protected SecurityFilterChain filterChain(HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
-        http
+    protected SecurityFilterChain filterChain(HttpSecurity http/*, MvcRequestMatcher.Builder mvc*/) throws Exception {
+        return http
                 .csrf(csrf ->
                         csrf.disable()
                 )
@@ -46,15 +39,16 @@ public class SecurityConfig {
                         sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth ->
-                                auth
-                                        .requestMatchers(mvc.pattern("/api/security/free/**")).permitAll()
-//                                .requestMatchers(antMatcher("/services/**")).permitAll()
-                                        .requestMatchers(mvc.pattern(HttpMethod.GET, "/api/**")).hasAuthority("admin")
-//                                .requestMatchers(mvc.pattern(HttpMethod.PUT, "/api/**")).hasAuthority("customer")
-                                        .anyRequest().permitAll()
-                );
-        http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-        return http.build();
+                        auth
+                                .requestMatchers("/api/security/free/**").permitAll()
+                                .requestMatchers("/services").permitAll()
+                                .requestMatchers("/services/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/category/**").hasAuthority("admin")
+                                .anyRequest().permitAll()
+                )
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .build()
+                ;
     }
 
     @Bean
