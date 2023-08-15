@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UsernamePassAuthService {
+public class UsernamePassAuthService implements AuthenticationInterface {
 
     private final PasswordEncoder passwordEncoder;
     private final WebshopUserDetailsService webshopUserDetailsService;
@@ -20,6 +20,7 @@ public class UsernamePassAuthService {
         return passwordEncoder.matches(incomingPassword, encodedPassword);
     }
 
+    @Override
     public Authentication authenticate(String username, String password) {
         UserDetails userDetails = webshopUserDetailsService.loadUserByUsername(username);
 

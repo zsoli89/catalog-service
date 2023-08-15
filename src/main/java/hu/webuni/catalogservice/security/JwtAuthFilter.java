@@ -32,14 +32,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         freeUriConfiguration.setUriParts();
         if (isProtectedByJwt(freeUriConfiguration.getUriParts(), request.getRequestURI())) {
             String jwtToken = request.getHeader(AUTHORIZATION);
+
             if (jwtToken == null || jwtToken.isBlank() || !jwtToken.startsWith(BEARER)) {
                 logger.error("Not a Bearer token: {%s}".formatted(jwtToken));
-                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
             }
             MDC.put(ACC_TOKEN, jwtToken);
-            UsernamePasswordAuthenticationToken authentication = securityService.validateAccessToken(MDC.get(ACC_TOKEN));
-            MDC.put("username", authentication.getName());
+            UsernamePasswordAuthenticationToken authentication =  securityService.validateAccessToken(MDC.get(ACC_TOKEN));
             if (authentication != null) {
+                MDC.put("username", authentication.getName());
                 SecurityContextHolder
                         .getContext()
                         .setAuthentication(authentication);

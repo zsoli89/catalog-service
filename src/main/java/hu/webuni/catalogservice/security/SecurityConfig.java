@@ -17,8 +17,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
-import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
-
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -51,7 +49,7 @@ public class SecurityConfig {
                                 auth
                                         .requestMatchers(mvc.pattern("/api/security/free/**")).permitAll()
 //                                .requestMatchers(antMatcher("/services/**")).permitAll()
-//                                .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/**")).hasAuthority("admin")
+                                        .requestMatchers(mvc.pattern(HttpMethod.GET, "/api/**")).hasAuthority("admin")
 //                                .requestMatchers(mvc.pattern(HttpMethod.PUT, "/api/**")).hasAuthority("customer")
                                         .anyRequest().permitAll()
                 );

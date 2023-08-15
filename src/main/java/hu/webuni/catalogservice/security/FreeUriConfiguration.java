@@ -1,20 +1,18 @@
 package hu.webuni.catalogservice.security;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
 @Configuration
-@Data
 public class FreeUriConfiguration {
 
     private List<String> uriParts;
-
-    public List<String> getUriParts() {
-        return uriParts;
-    }
 
     public FreeUriConfiguration setUriParts() {
         this.uriParts = new ArrayList<>();

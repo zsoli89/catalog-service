@@ -28,9 +28,7 @@ public class SecurityController {
 
     @GetMapping("/logout/{username}")
     @ResponseStatus(HttpStatus.OK)
-    public String logoutByUsername(
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable String username
-    ) {
-        return securityService.logout(token, username);
+    public String logoutByUsername(@PathVariable String username) {
+        return securityService.logout(username);
     }
 }

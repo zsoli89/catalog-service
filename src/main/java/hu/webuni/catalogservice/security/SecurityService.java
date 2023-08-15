@@ -55,8 +55,7 @@ public class SecurityService {
         }
     }
 
-    public String logout(String token, String username) {
-        jwtTokenService.checkJwtToken(token);
+    public String logout(String username) {
         try {
             if (!MDC.get("username").equals(username))
                 throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
