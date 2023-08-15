@@ -3,15 +3,15 @@ package hu.webuni.catalogservice.service;
 import hu.webuni.catalogservice.model.entity.*;
 import hu.webuni.catalogservice.model.enums.AmountUnits;
 import hu.webuni.catalogservice.repository.*;
+import hu.webuni.catalogservice.securityconfig.entity.AppUser;
+import hu.webuni.catalogservice.securityconfig.entity.ResponsibilityAppUser;
+import hu.webuni.catalogservice.securityconfig.repository.AppUserRepository;
+import hu.webuni.catalogservice.securityconfig.repository.ResponsibilityAppUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Service

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/warehouse")
+@RequestMapping("/catalog/warehouse")
 public class WarehouseController {
 
     private final WarehouseService warehouseService;

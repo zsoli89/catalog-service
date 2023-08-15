@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/category")
+@RequestMapping("/catalog/category")
 public class CategoryController {
 
     private final CategoryService categoryService;

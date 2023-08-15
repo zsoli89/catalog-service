@@ -1,4 +1,4 @@
-package hu.webuni.catalogservice.security;
+package hu.webuni.catalogservice.securityconfig;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor

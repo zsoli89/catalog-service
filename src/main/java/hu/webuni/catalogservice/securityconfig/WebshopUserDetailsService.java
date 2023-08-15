@@ -1,9 +1,9 @@
-package hu.webuni.catalogservice.security;
+package hu.webuni.catalogservice.securityconfig;
 
-import hu.webuni.catalogservice.model.entity.AppUser;
-import hu.webuni.catalogservice.model.entity.ResponsibilityAppUser;
-import hu.webuni.catalogservice.repository.AppUserRepository;
-import hu.webuni.catalogservice.repository.ResponsibilityAppUserRepository;
+import hu.webuni.catalogservice.securityconfig.entity.AppUser;
+import hu.webuni.catalogservice.securityconfig.entity.ResponsibilityAppUser;
+import hu.webuni.catalogservice.securityconfig.repository.AppUserRepository;
+import hu.webuni.catalogservice.securityconfig.repository.ResponsibilityAppUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -34,7 +34,8 @@ public class WebshopUserDetailsService implements UserDetailsService {
     }
 
     public List<String> getRoles(String username) {
-        List<ResponsibilityAppUser> responsibilityAppUserList = responsibilityRepository.findResponsibilityAppUserByUsername(username);
+        List<ResponsibilityAppUser> responsibilityAppUserList = responsibilityRepository
+                .findResponsibilityAppUserByUsername(username);
         List<String> roles = new ArrayList<>();
         for(ResponsibilityAppUser item : responsibilityAppUserList)
             roles.add(item.getRole());

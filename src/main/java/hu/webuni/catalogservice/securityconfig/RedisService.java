@@ -1,4 +1,4 @@
-package hu.webuni.catalogservice.security;
+package hu.webuni.catalogservice.securityconfig;
 
 import io.lettuce.core.RedisConnectionException;
 import org.slf4j.Logger;
@@ -19,22 +19,9 @@ public class RedisService {
         this.redisTemplate = redisTemplate;
     }
 
-    public void setValueWithExpiration(String key, String value, long expirationSeconds) {
-        try {
-            redisTemplate.opsForValue().set(key, value, expirationSeconds, TimeUnit.SECONDS);
-        } catch (RedisConnectionException re) {
-            logger.error("An error occured while connecting to redis. message: {}", re.getMessage());
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
-    }
-
     public String getValueFromRedis(String redisKey) {
         return redisTemplate.opsForValue().get(redisKey);
     }
 
-    public void deleteFromRedis(String redisKey) {
-        redisTemplate.delete(redisKey);
-    }
 
 }
