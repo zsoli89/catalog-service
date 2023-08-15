@@ -1,4 +1,4 @@
-package hu.webuni.catalogservice.model.entity;
+package hu.webuni.catalogservice.securityconfig.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
