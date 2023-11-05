@@ -6,7 +6,6 @@ import hu.webuni.catalogservice.repository.*;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,17 +17,12 @@ public class InitDbService {
     private final ProductRepository productRepository;
     private final JdbcTemplate jdbcTemplate;
     private final WarehouseRepository warehouseRepository;
-    private final AppUserRepository appUserRepository;
-    private final ResponsibilityAppUserRepository responsibilityRepository;
-    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public void deleteDb() {
         productRepository.deleteAllInBatch();
         categoryRepository.deleteAllInBatch();
         warehouseRepository.deleteAllInBatch();
-        appUserRepository.deleteAllInBatch();
-        responsibilityRepository.deleteAllInBatch();
     }
 
     @Transactional
@@ -62,12 +56,6 @@ public class InitDbService {
         createWarehouse(product5.getId(), 5L);
         createWarehouse(product6.getId(), 5L);
         createWarehouse(product7.getId(), 5L);
-
-        AppUser user1 = createUser("jakab.zoltan", "ugyejo");
-        AppUser user2 = createUser("gelesztas.gazsi", "dummy");
-        createRole(user1.getUsername(), "admin");
-        createRole(user1.getUsername(), "customer");
-        createRole(user2.getUsername(), "customer");
     }
 
     private Category createCategory(String name) {
@@ -101,26 +89,6 @@ public class InitDbService {
                 Warehouse.builder()
                         .productId(productId)
                         .quantity(quantity)
-                        .build()
-        );
-    }
-
-    @Transactional
-    public AppUser createUser(String username, String password) {
-        return appUserRepository.save(
-                AppUser.builder()
-                        .username(username)
-                        .password(passwordEncoder.encode(password))
-                        .build()
-        );
-    }
-
-    @Transactional
-    public void createRole(String username, String role) {
-        responsibilityRepository.save(
-                ResponsibilityAppUser.builder()
-                        .username(username)
-                        .role(role)
                         .build()
         );
     }
