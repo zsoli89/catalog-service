@@ -3,15 +3,12 @@ package hu.webuni.catalogservice.service;
 import hu.webuni.catalogservice.model.entity.*;
 import hu.webuni.catalogservice.model.enums.AmountUnits;
 import hu.webuni.catalogservice.repository.*;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -69,6 +66,7 @@ public class InitDbService {
         AppUser user1 = createUser("jakab.zoltan", "ugyejo");
         AppUser user2 = createUser("gelesztas.gazsi", "dummy");
         createRole(user1.getUsername(), "admin");
+        createRole(user1.getUsername(), "customer");
         createRole(user2.getUsername(), "customer");
     }
 
