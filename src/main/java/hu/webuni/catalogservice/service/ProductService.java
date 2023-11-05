@@ -14,7 +14,9 @@ import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
+import org.hibernate.envers.DefaultRevisionEntity;
 import org.hibernate.envers.RevisionType;
+import org.hibernate.envers.query.AuditEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
@@ -129,6 +131,31 @@ public class ProductService {
             priceHistory.add(new HistoryData<>(price, revType, revision.intValue(), revisionDate));
         }
         return priceHistory;
+    }
+
+    @Transactional
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    @Cacheable("productHistory")
+    public List<HistoryData<Product>> getHistoryById2(Long id) {
+
+        return AuditReaderFactory.get(em)
+                .createQuery()
+                .forRevisionsOfEntity(Product.class, false, false)
+                .add(AuditEntity.property("id").eq(id))
+                .getResultList()
+                .stream()
+                .map(o -> {
+                    Object[] objArray = (Object[]) o;
+                    DefaultRevisionEntity revisionEntity = (DefaultRevisionEntity) objArray[1];
+                    Product product = (Product) objArray[0];
+
+                    return new HistoryData<Product>(
+                            product,
+                            (RevisionType) objArray[2],
+                            revisionEntity.getId(),
+                            revisionEntity.getRevisionDate()
+                    );
+                }).toList();
     }
 
     public List<ProductDto> findByIdList(OrderDto dto) {
