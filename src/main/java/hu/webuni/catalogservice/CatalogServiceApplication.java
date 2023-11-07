@@ -1,7 +1,7 @@
 package hu.webuni.catalogservice;
 
 import hu.webuni.catalogservice.service.InitDbService;
-import hu.webuni.security.JwtAuthFilter;
+import hu.thesis.security.JwtAuthFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
