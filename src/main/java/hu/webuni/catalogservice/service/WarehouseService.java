@@ -16,7 +16,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class WarehouseService {
 
-    private static final Logger logger = LoggerFactory.getLogger(WarehouseService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(WarehouseService.class);
 
     private final WarehouseRepository warehouseRepository;
     private final WarehouseMapper mapper;
@@ -24,9 +24,9 @@ public class WarehouseService {
     public BaseResponseDto getCurrentProductPerQuantity(OrderDto orderRequestDto) {
         Set<Long> productIdSet = orderRequestDto.getProducts().keySet();
         List<WarehouseDto> byProductIdList = mapper.warehouseToDtoList(warehouseRepository.findByProductIdList(productIdSet));
-        logger.info("Products in warehouse list size: {}", byProductIdList.size());
+        LOGGER.info("Products in warehouse list size: {}", byProductIdList.size());
         if (byProductIdList.isEmpty()) {
-            logger.error("Couldn't found products in warehouse");
+            LOGGER.error("Couldn't found products in warehouse");
             return new BaseResponseDto(new HashMap<>());
         }
         Map<Long, Long> map = new HashMap<>();

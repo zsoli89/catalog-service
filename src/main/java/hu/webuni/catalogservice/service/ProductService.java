@@ -24,6 +24,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ import java.util.Optional;
 @Service
 public class ProductService {
 
-    private static final Logger logger = LoggerFactory.getLogger(ProductService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProductService.class);
 
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
@@ -52,27 +53,27 @@ public class ProductService {
         if (product.getCategory() != null) {
             Optional<Category> optionalCategory = categoryRepository.findById(product.getCategory().getId());
             if (optionalCategory.isEmpty()) {
-                logger.error("Couldn't find Category entity with id: {}, to save Product", product.getCategory().getId());
+                LOGGER.error("Couldn't find Category entity with id: {}, to save Product", product.getCategory().getId());
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND);
             }
             product.setCategory(optionalCategory.get());
             savedProduct = productRepository.save(product);
-            logger.info("Product saved by id {}", savedProduct.getId());
+            LOGGER.info("Product saved by id {}", savedProduct.getId());
             return productMapper.entityToDto(savedProduct);
         } else {
             savedProduct = productRepository.save(product);
-            logger.info("Product saved by id {}", savedProduct.getId());
+            LOGGER.info("Product saved by id {}", savedProduct.getId());
             return productMapper.productSummaryToDto(product);
         }
     }
 
     private Product expandProduct(Product product) {
-        if (product.getBrand() == null || product.getBrand().isBlank())
+        if (!StringUtils.hasText(product.getBrand()))
+            product.setBrand(UNDEFINED);
+        if (!StringUtils.hasText(product.getColor()))
             product.setColor(UNDEFINED);
-        if (product.getColor() == null || product.getColor().isBlank())
-            product.setColor(UNDEFINED);
-        if (product.getDescription() == null || product.getDescription().isBlank())
-            product.setColor(UNDEFINED);
+        if (!StringUtils.hasText(product.getDescription()))
+            product.setDescription(UNDEFINED);
         return product;
     }
 
@@ -80,11 +81,11 @@ public class ProductService {
     public ProductDto update(ProductDto dto) {
         boolean isExists = productRepository.existsById(dto.getId());
         if (!isExists) {
-            logger.error("Couldn't find Product entity to update by id: {}", dto.getId());
+            LOGGER.error("Couldn't find Product entity to update by id: {}", dto.getId());
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
         Product updatedProduct = productRepository.save(productMapper.dtoToEntity(dto));
-        logger.info("Product updated by id {}", updatedProduct.getId());
+        LOGGER.info("Product updated by id {}", updatedProduct.getId());
         return productMapper.entityToDto(updatedProduct);
     }
 
@@ -92,11 +93,11 @@ public class ProductService {
     public void delete(Long id) {
         boolean isExists = productRepository.existsById(id);
         if (!isExists) {
-            logger.error("Couldn't find Product entity to delete by id: {}", id);
+            LOGGER.error("Couldn't find Product entity to delete by id: {}", id);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
         productRepository.deleteById(id);
-        logger.info("Product deleted by id: {}", id);
+        LOGGER.info("Product deleted by id: {}", id);
     }
 
     public List<ProductDto> searchProducts(Predicate predicate, Pageable pageable) {
@@ -165,18 +166,15 @@ public class ProductService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
         List<ProductDto> productDtoList = productMapper.productSummariesToDtoList(productList);
-        if (productDtoList.size() == dto.getProducts().size()) {
             for (ProductDto productDto : productDtoList) {
-                Long id = productDto.getId();
-                if (dto.getProducts().containsKey(id)) {
-                    Long quantity = dto.getProducts().get(id);
+                Long productId = productDto.getId();
+                if (dto.getProducts().containsKey(productId)) {
+                    Long quantity = dto.getProducts().get(productId);
                     productDto.setOrderedQuantity(quantity);
                 }
             }
-        }
-        logger.info("Product entities found by ids, list size: {}", productDtoList.size());
+        LOGGER.info("Product entities found by ids, list size: {}", productDtoList.size());
         return productDtoList;
-
     }
 }
 

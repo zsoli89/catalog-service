@@ -19,7 +19,7 @@ import java.util.Optional;
 @Service
 public class CategoryService {
 
-    private static final Logger logger = LoggerFactory.getLogger(CategoryService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CategoryService.class);
 
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
@@ -44,11 +44,11 @@ public class CategoryService {
         List<Category> categoryList = categoryRepository.findAll();
         List<Category> matchedCategories = categoryList.stream().filter(c -> c.getName().equals(dto.getName())).toList();
         if (!matchedCategories.isEmpty()) {
-            logger.error("Category already exists with name: {}", dto.getName());
+            LOGGER.error("Category already exists with name: {}", dto.getName());
             throw new ResponseStatusException(HttpStatus.CONFLICT);
         }
         Category savedCategory = categoryRepository.save(categoryMapper.dtoToEntity(dto));
-        logger.info("Category saved by id {}", savedCategory.getId());
+        LOGGER.info("Category saved by id {}", savedCategory.getId());
         return categoryMapper.entityToDto(savedCategory);
     }
 

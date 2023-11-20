@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
+import org.springframework.data.repository.query.Param;
 
 import java.util.Iterator;
 import java.util.List;
@@ -65,5 +66,5 @@ public interface ProductRepository extends
     List<Product> findProductByBrand(String brand);
 
     @Query("SELECT p FROM Product p WHERE p.id IN :ids")
-    List<Product> findByIdList(List<Long> ids);
+    List<Product> findByIdList(@Param("ids") List<Long> ids);
 }
